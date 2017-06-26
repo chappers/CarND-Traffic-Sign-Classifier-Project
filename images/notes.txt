@@ -1,0 +1,11 @@
+y_custom = np.array([
+    21, # "example_00001"
+    39, # "example_00002"
+    17, # "example_00003"
+    17, # "example_00004"
+    17, # "example_00005"
+    39, # "example_00006"
+    39, # "example_00007"
+    40, # "example_00008"
+    40, # "example_00009"
+    34, # "example_00010"])
