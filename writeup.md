@@ -17,17 +17,6 @@ The goals / steps of this project are the following:
 * Summarize the results with a written report
 
 
-[//]: # (Image References)
-
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
-
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
 
@@ -36,7 +25,7 @@ The goals / steps of this project are the following:
 
 ####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
 
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+Here is a link to my [project code](https://github.com/chappers/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier_FINAL.ipynb)
 
 ###Data Set Summary & Exploration
 
@@ -45,70 +34,64 @@ You're reading it! and here is a link to my [project code](https://github.com/ud
 I used the pandas library to calculate summary statistics of the traffic
 signs data set:
 
-* The size of training set is ?
-* The size of the validation set is ?
-* The size of test set is ?
-* The shape of a traffic sign image is ?
-* The number of unique classes/labels in the data set is ?
+* The size of training set is 34799
+* The size of the validation set is 4410
+* The size of test set is 12630
+* The shape of a traffic sign image is `(32, 32, 3)`
+* The number of unique classes/labels in the data set is 43
 
 ####2. Include an exploratory visualization of the dataset.
 
-Here is an exploratory visualization of the data set. It is a bar chart showing how the data ...
+Here is an exploratory visualization of the data set. It is a bar chart showing the distribution of the labels across the dataset. From here we can see that it is clearly an unbalanced learning problem, which means, we might be able to get some training improvement by adding additional training samples for the classes which are not as well represented. 
 
-![alt text][image1]
+![label histogram][barchart.png]
 
 ###Design and Test a Model Architecture
 
 ####1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
 
-As a first step, I decided to convert the images to grayscale because ...
+As the LeNet implementation used grayscale, I decided to modify it to take non-grayscale features, as the colour of the sign is probably close to the classification (e.g. no entry is red, other signs are blue etc.)
 
-Here is an example of a traffic sign image before and after grayscaling.
+Beyond that we normalised the colours to the average colour, as an attempt to remove random darkness/brightness with the images. 
 
-![alt text][image2]
+Finally to generate new samples and make the problem more "balanced" we created synthetic examples via randomly rotating and transforming the image (rotations, shearing and translations). 
 
-As a last step, I normalized the image data because ...
-
-I decided to generate additional data because ... 
-
-To add more data to the the data set, I used the following techniques because ... 
-
-Here is an example of an original image and an augmented image:
-
-![alt text][image3]
-
-The difference between the original data set and the augmented data set is the following ... 
-
+![sample transforms][sample_transforms.png]
 
 ####2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
-My final model consisted of the following layers:
+My final model consisted of the following layers (using LeNet):
 
-| Layer         		|     Description	        					| 
-|:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x3 RGB image   							| 
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
-| RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
-|						|												|
-|						|												|
- 
+*  Layer 1: Convolutional. Input = 32x32x3. Output = 28x28x6
+*  Activation: RELU
+*  Max Pooling. Input = 28x28x6. Output = 14x14x6.
+*  Layer 2: Convolutional. Output = 10x10x16.
+*  Activation: RELU
+*  Max Pooling. Input = 10x10x16. Output = 5x5x16.
+*  Flatten. Input = 5x5x16. Output = 400.
+*  Layer 3: Fully Connected. Input = 400. Output = 120.
+*  Activation: RELU
+*  Layer 4: Fully Connected. Input = 120. Output = 84.
+*  Activation: RELU
+*  Layer 5: Fully Connected. Input = 84. Output = 43.
 
 
 ####3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-To train the model, I used an ....
+We used exponential decay for the learning rate which is updated on each step using the equation:
+
+$$learning_rate := learning_rate * decay$$
+
+We used the initial learning rate to be 0.001, and the decay to be 0.9.
 
 ####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+* training set accuracy of 0.965
+* validation set accuracy of 0.925
+* test set accuracy of 0.915
 
+<!-- 
 If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?
 * What were some problems with the initial architecture?
@@ -116,10 +99,12 @@ If an iterative approach was chosen:
 * Which parameters were tuned? How were they adjusted and why?
 * What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
 
+-->
+
 If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
+* What architecture was chosen? LeNet
+* Why did you believe it would be relevant to the traffic sign application? LeNet proved to be reasonably predictive out of the box (89% accuracy), with additional gains through augmenting the data
+* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well? 
  
 
 ###Test a Model on New Images
@@ -167,5 +152,4 @@ For the second image ...
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 ####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
-
 
