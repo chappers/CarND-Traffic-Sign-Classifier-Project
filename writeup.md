@@ -88,7 +88,7 @@ We used the initial learning rate to be 0.001, and the decay to be 0.9.
 
 In addition to this, I played around with dropout as a way to regularise our neural network. Initially I used drop out on all layers, but defaulted to only the final layer, due to the massive increase in time required to train. This helped bring the training and validation datasets to have a closer score. 
 
-I found increasing EPOCH didn't do much except increase frustration, so I left it relatively low (25) so that I could iteratively improve other parts of the process. 
+I found increasing EPOCH didn't do much except increase frustration, so I left it relatively low (10) so that I could iteratively improve other parts of the process, which were far more effective. 
 
 All other options to be the same as LeNet. 
 
@@ -96,9 +96,9 @@ All other options to be the same as LeNet.
 
 My final model results were:
 
-* training set accuracy of 0.971  
-* validation set accuracy of 0.930  
-* test set accuracy of 0.918  
+* training set accuracy of 0.974  
+* validation set accuracy of 0.940  
+* test set accuracy of 0.910  
 
 If a well known architecture was chosen:
 
@@ -129,22 +129,25 @@ The first image was difficult as the triangle shape could have many different sy
 
 Here are the results of the prediction:
 
-| Image			            |     Prediction	        					| 
+| Image                     | Prediction                                    | 
 |:-------------------------:|:---------------------------------------------:| 
-| Double Curve     		    | Road Work   									| 
-| Keep Left                 | Keep left 									|
-| No entry (x3)			    | No entry (x3)									|
-| Keep left (x2)    		| Keep left (x2)				 				|
-| Roundabout mandatory(x2)  | Roundabout mandatory(x2)  					|
-| Turn left ahead           | Turn left ahead             					|
+| Double Curve              | Wild animal crossing                          |
+| Keep left (x3)            | Keep Left, No passing vehicle over 3.5m (x2)  |
+| No entry (x3)             | No entry (x3)                                 |
+| Roundabout mandatory(x2)  | Turn right ahead, Keep right                  |
+| Turn left ahead           | Turn left ahead                               |
 
 
-The model was able to correctly guess 5 of the 6 traffic signs, which gives an accuracy of 83%. 
+The model was able to correctly guess 5 of the 10 traffic signs, which gives an accuracy of 50%. 
+
+What is interesting is that the correct prediction was generally the 2nd one in the situation where it was incorrect.
 
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The graphics for the prediction is shown below. On a relative scale, we can see that it was less sure about the "double curve" sign compared with most of the predictions. The only one which had a lower likelihood was the 3rd "No entry" sign, which was correctly predicted.
+The graphics for the prediction is shown below. All of the ones which were incorrect was the 2nd option in the images. 
+
+Besides "double curve" the likelihood for the one which were wrong were generally quite similar.
 
 ![custom1](custom1.png)
 
